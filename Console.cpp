@@ -33,12 +33,14 @@ namespace conlib {
         _oldWinHeight = -1;
         _curAttr = Attr::None;
         _buffer.clear();
-        _dirtyBuf.clear();
+        _backBuf.clear();
+        //_dirtyBuf.clear();
     }
 
     Console::~Console() {
         _buffer.clear();
-        _dirtyBuf.clear();
+        _backBuf.clear();
+        //_dirtyBuf.clear();
         if(_init) {
             SetPalette(_oldPalette);
 
@@ -111,7 +113,7 @@ namespace conlib {
     }
 
     CChar Console::GetChar(short x, short y) const {
-        return _buffer[x + y * _width];
+        return _backBuf[x + y * _width];
     }
 
     short Console::Width() const {
@@ -160,10 +162,10 @@ namespace conlib {
         if((x < 0) || (y < 0) || (x >= _width) || (y >= _height)) {
             return;
         }
-        if(!Equal(_buffer[x + y * _width], ch)) {
-            _buffer[x + y * _width] = ch;
+        if(!Equal(_backBuf[x + y * _width], ch)) {
+            _backBuf[x + y * _width] = ch;
             //_dirty = true;
-            _dirtyBuf[x + y * _width] = true;
+            //_dirtyBuf[x + y * _width] = true;
         }
     }
 
@@ -179,13 +181,13 @@ namespace conlib {
         if(max_length < 0) { max_length = (int)std::min((std::size_t)INT32_MAX, str.length()); }
         int start_idx = x + y * _width;
         CChar tmpch;
-        for(int i = 0; (i < str.length()) && (i < max_length) && (i + start_idx < _buffer.size()); ++i) {
+        for(int i = 0; (i < str.length()) && (i < max_length) && (i + start_idx < _backBuf.size()); ++i) {
             tmpch.Char.UnicodeChar = str[i];
             tmpch.Attributes = attr;
-            if(!Equal(_buffer[i + start_idx], tmpch)) {
-                _buffer[i + start_idx] = tmpch;
+            if(!Equal(_backBuf[i + start_idx], tmpch)) {
+                _backBuf[i + start_idx] = tmpch;
                 //_dirty = true;
-                _dirtyBuf[i + start_idx] = true;
+                //_dirtyBuf[i + start_idx] = true;
             }
         }
     }
@@ -194,13 +196,13 @@ namespace conlib {
         if(max_length < 0) { max_length = (int)std::min((std::size_t)INT32_MAX, str.length()); }
         int start_idx = x + y * _width;
         CChar tmpch;
-        for(int i = 0; (i < str.length()) && (i < max_length) && (i + start_idx < _buffer.size()); ++i) {
+        for(int i = 0; (i < str.length()) && (i < max_length) && (i + start_idx < _backBuf.size()); ++i) {
             tmpch.Char.UnicodeChar = str[i];
             tmpch.Attributes = _curAttr;
-            if(!Equal(_buffer[i + start_idx], tmpch)) {
-                _buffer[i + start_idx] = tmpch;
+            if(!Equal(_backBuf[i + start_idx], tmpch)) {
+                _backBuf[i + start_idx] = tmpch;
                 //_dirty = true;
-                _dirtyBuf[i + start_idx] = true;
+                //_dirtyBuf[i + start_idx] = true;
             }
         }
     }
@@ -306,6 +308,15 @@ namespace conlib {
         //_dirty = false;
 
         auto hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+        if(_dirty) {
+            auto buf_size = COORD{_width, _height};
+            auto buf_coord = COORD{0, 0};
+            auto write_region = SMALL_RECT{0, 0, _width - 1, _height - 1};
+            WriteConsoleOutputW(hOut, _backBuf.data(), buf_size, buf_coord, &write_region);
+            _dirty = false;
+            flipBuffer();
+            return;
+        }
 #ifdef DISPLAY_STRATEGY_WHOLE
         for(int y = 0; y < _height; ++y) {
             for(int x = 0; x < _width; ++x) {
@@ -320,16 +331,16 @@ namespace conlib {
 #elif defined(DISPLAY_STRATEGY_SMART)
         auto buf_size = COORD{_width, _height};
         auto rects = compileDirtyRects();
-        if(rects.size() <= 255) {
+        if(totalAreaOfDirtyRects(rects) <= (_width * _height) / 4) {
             for(auto & rect : compileDirtyRects()) {
                 auto buf_coord = COORD{rect.Left, rect.Top};
                 auto write_region = rect;
-                WriteConsoleOutputW(hOut, _buffer.data(), buf_size, buf_coord, &write_region);
+                WriteConsoleOutputW(hOut, _backBuf.data(), buf_size, buf_coord, &write_region);
             }
         } else {
             auto buf_coord = COORD{0,0};
             auto write_region = SMALL_RECT{0, 0, _width - 1, _height - 1};
-            WriteConsoleOutputW(hOut, _buffer.data(), buf_size, buf_coord, &write_region);
+            WriteConsoleOutputW(hOut, _backBuf.data(), buf_size, buf_coord, &write_region);
         }
 #elif defined(DISPLAY_STRATEGY_TUNED)
         const int SPLIT = 4;
@@ -394,7 +405,8 @@ namespace conlib {
         }
 #endif
 
-        ClearAllDirty();
+        //ClearAllDirty();
+        flipBuffer();
     }
 
     bool Console::CursorVisible() const {
@@ -463,17 +475,28 @@ namespace conlib {
 
     bool Console::IsDirty() const {
         //return _dirty;
-        auto iter = std::find(std::begin(_dirtyBuf), std::end(_dirtyBuf), true);
-        if(iter != std::end(_dirtyBuf)) {
-            return true;
+        //auto iter = std::find(std::begin(_dirtyBuf), std::end(_dirtyBuf), true);
+        //if(iter != std::end(_dirtyBuf)) {
+        //    return true;
+        //}
+        //return false;
+        if(_dirty) { return true; }
+        else {
+            bool dirty = false;
+            for(int i = 0; i < _width * _height; ++i) {
+                if(!Equal(_buffer[i], _backBuf[i])) {
+                    return true;
+                }
+            }
+            return false;
         }
-        return false;
     }
 
     bool Console::IsRectDirty(SMALL_RECT const & rect) const {
+        if(_dirty) { return true; }
         for(int y = rect.Top; y <= rect.Bottom; ++y) {
             for(int x = rect.Left; x <= rect.Right; ++x) {
-                if(_dirtyBuf[x + y * _width]) {
+                if(!Equal(_buffer[x + y * _width], _backBuf[x + y * _width])) {
                     return true;
                 }
             }
@@ -486,11 +509,13 @@ namespace conlib {
     //}
 
     void Console::SetAllDirty() {
-        _dirtyBuf.assign(_dirtyBuf.size(), true);
+        //_dirtyBuf.assign(_dirtyBuf.size(), true);
+        _dirty = true;
     }
 
     void Console::ClearAllDirty() {
-        _dirtyBuf.assign(_dirtyBuf.size(), false);
+        //_dirtyBuf.assign(_dirtyBuf.size(), false);
+        _dirty = false;
     }
 
     void Console::GetPalette(COLORREF color_table[16]) const {
@@ -522,14 +547,16 @@ namespace conlib {
             bool rect_found = false;
             for(x = 0; x < _width; x = next_x) {
                 SMALL_RECT rect = { };
-                if(_dirtyBuf[x + y * _width]) {
+                //if(_dirtyBuf[x + y * _width]) {
+                if(!Equal(_buffer[x + y * _width], _backBuf[x + y * _width])) {
                     rect_found = true;
                     rect.Left = x;
                     rect.Top = y;
                     rect.Bottom = y;
                     for(int x2 = x; x2 < _width; ++x2) {
                         next_x = x2 + 1;
-                        if(!_dirtyBuf[x2 + y * _width]) {
+                        //if(!_dirtyBuf[x2 + y * _width]) {
+                        if(Equal(_buffer[x + y * _width], _backBuf[x + y * _width])) {
                             break;
                         } else {
                             rect.Right = x2;
@@ -548,6 +575,20 @@ namespace conlib {
         //SetTitle(std::wstring(buf));
 
         return vec;
+    }
+
+    unsigned long long Console::totalAreaOfDirtyRects(std::vector<SMALL_RECT> const & rects) const {
+        unsigned long long ret = 0;
+        for(auto & rect : rects) {
+            auto width = rect.Right - rect.Left + 1;
+            auto height = rect.Bottom - rect.Top + 1;
+            ret += width * height;
+        }
+        return ret;
+    }
+
+    void Console::flipBuffer() {
+        memcpy(_buffer.data(), _backBuf.data(), _backBuf.size() * sizeof(CChar));
     }
 
     void Console::resizeConsole(short width, short height) {
@@ -612,10 +653,10 @@ namespace conlib {
     }
 
     void Console::resizeBuf(short width, short height) {
-        _buffer.clear();
-        _dirtyBuf.clear();
+        _dirty = true;
         _buffer.resize(width * height);
-        _dirtyBuf.resize(width * height);
+        _backBuf.resize(width * height);
+        //_dirtyBuf.resize(width * height);
         Clear();
     }
 

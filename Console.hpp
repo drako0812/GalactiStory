@@ -30,6 +30,7 @@ namespace conlib {
     class Console : public IConsole {
     private:
         std::vector<CChar> _buffer;
+        std::vector<CChar> _backBuf;
 
         Console();
 
@@ -53,12 +54,12 @@ namespace conlib {
         short _height;
         DWORD _oldOutMode;
         DWORD _oldInMode;
-        //bool _dirty;
+        bool _dirty;
         bool _init;
         UINT _oldInputCodePage;
         UINT _oldOutputCodePage;
         COLORREF _oldPalette[16];
-        std::vector<bool> _dirtyBuf;
+        //std::vector<bool> _dirtyBuf;
 
     public:
         void Initialize();
@@ -111,6 +112,8 @@ namespace conlib {
     private:
 
         std::vector<SMALL_RECT> compileDirtyRects();
+        unsigned long long totalAreaOfDirtyRects(std::vector<SMALL_RECT> const& rects) const;
+        void flipBuffer();
         //void lookRight(std::vector<SMALL_RECT> & vec, int startx, int starty, int maxx, int maxy);
         //void lookDown(std::vector<SMALL_RECT> & vec, int startx, int starty, int maxx, int maxy);
         void resizeConsole(short width, short height);
