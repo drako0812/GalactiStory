@@ -20,11 +20,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "stdafx.h"
-#include "Game.hpp"
+#pragma once
 
-int wmain(int argc, wchar_t * argv[]) {
-    std::make_unique<gquest::Game>()->Run();
+#include "randutils.hpp"
+#include "ConLibBase.hpp"
+#include "Console.hpp"
+#include "SubConsole.hpp"
+#include "GalactiQuestBase.hpp"
 
-    return 0;
+namespace gquest {
+
+    using namespace conlib;
+    using namespace randutils;
+
+    constexpr int GAME_WIDTH = 120;
+    constexpr int GAME_HEIGHT = 36;
+
+    class Game {
+    private:
+        std::unique_ptr<SubConsole> _subcon1;
+        int _playerX;
+        int _playerY;
+        bool _running;
+        bool _oldCursorVisible;
+        mt19937_rng _rng;
+    public:
+        Game();
+        ~Game();
+        void Run();
+        void Render();
+        void Update();
+        void HandleEvents();
+        void HandleKeyEvent(KEY_EVENT_RECORD const& evt);
+    };
+
 }
