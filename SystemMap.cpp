@@ -22,8 +22,9 @@
 #include "stdafx.h"
 #include "SystemMap.hpp"
 
+namespace gquest {
+    SystemMap::SystemMap() { }
 
-SystemMap::SystemMap() { }
 
-
-SystemMap::~SystemMap() { }
+    SystemMap::~SystemMap() { }
+}

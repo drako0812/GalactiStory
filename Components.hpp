@@ -34,6 +34,7 @@ namespace gquest::components {
     public:
         Name();
         Name(string const& name);
+        Name(Name const& name);
 
         string const& GetName();
         void SetName(string const& name);
@@ -51,6 +52,7 @@ namespace gquest::components {
     public:
         Position();
         Position(sysid currentSystem, IVector2 const& systemPosition, bool inSystem);
+        Position(Position const& position);
 
         sysid GetCurrentSystem() const;
         IVector2 const& GetPosition() const;

@@ -38,7 +38,7 @@ namespace gquest {
         constexpr Vector3(Type && X, Type && Y, Type && Z) : X(std::move(X)), Y(std::move(Y)), Z(std::move(Z)) { }
         constexpr Vector3(Vector3 && vec) : X(std::move(vec.X)), Y(std::move(vec.Y)), Z(std::move(vec.Z)) { }
 
-        inline constexpr Vector3 operator *(float_ scalar) {
+        inline constexpr Vector3 operator *(float_ scalar) const {
             return Vector3(
                 static_cast<Type>(X*scalar),
                 static_cast<Type>(Y*scalar),
@@ -46,7 +46,7 @@ namespace gquest {
             );
         }
 
-        inline constexpr Vector3 operator +(Vector3 const& vec) {
+        inline constexpr Vector3 operator +(Vector3 const& vec) const {
             return Vector3(
                 X + vec.X,
                 Y + vec.Y,
@@ -54,33 +54,33 @@ namespace gquest {
             );
         }
 
-        inline constexpr Vector3 operator -(Vector3 const& vec) {
+        inline constexpr Vector3 operator -(Vector3 const& vec) const {
             return *this + (vec * -1.0);
         }
 
-        inline constexpr float_ len() { return std::sqrt(X * X + Y * Y + Z * Z); }
-        inline constexpr float_ len2() { return X * X + Y * Y + Z * Z; }
-        inline constexpr Vector3 norm() { return *this * (1.0 / len()); }
-        inline constexpr float_ dot(Vector3 const& vec) {
+        inline constexpr float_ len() const { return std::sqrt(X * X + Y * Y + Z * Z); }
+        inline constexpr float_ len2() const { return X * X + Y * Y + Z * Z; }
+        inline constexpr Vector3 norm() const { return *this * (1.0 / len()); }
+        inline constexpr float_ dot(Vector3 const& vec) const {
             return X * vec.X + Y * vec.Y + Z * vec.Z;
         }
-        inline constexpr bool collin(Vector2 const& vec) {
+        inline constexpr bool collin(Vector3 const& vec) const {
             return approx_equal(this->dot(vec), (this->len() * vec.len()));
         }
-        inline constexpr bool collino(Vector2 const& vec) {
+        inline constexpr bool collino(Vector3 const& vec) const {
             return approx_equal(this->dot(vec), -1 * (this->len() * vec.len()));
         }
-        inline constexpr bool perp(Vector2 const& vec) {
+        inline constexpr bool perp(Vector3 const& vec) const {
             return approx_equal(this->dot(vec), 0);
         }
-        inline constexpr bool samedir(Vector2 const& vec) {
+        inline constexpr bool samedir(Vector3 const& vec) const {
             return this->dot(vec) > 0;
         }
-        inline constexpr bool oppdir(Vector2 const& vec) {
+        inline constexpr bool oppdir(Vector3 const& vec) const {
             return this->dot(vec) < 0;
         }
 
-        inline constexpr Vector3 cross(Vector3 const& vec) {
+        inline constexpr Vector3 cross(Vector3 const& vec) const {
             return Vector3(
                 Y * vec.Z - Z * vec.Y,
                 Z * vec.X - X * vec.Z,
@@ -88,15 +88,15 @@ namespace gquest {
             );
         }
 
-        inline constexpr float_ area_rect(Vector3 const& vec) {
+        inline constexpr float_ area_rect(Vector3 const& vec) const {
             return this->cross(vec).len();
         }
 
-        inline constexpr float_ area_tri(Vector3 const& vec) {
+        inline constexpr float_ area_tri(Vector3 const& vec) const {
             return 0.5 * this->cross(vec).len();
         }
 
-        inline constexpr Vector3 lerp(Vector3 const& b, float_ beta) {
+        inline constexpr Vector3 lerp(Vector3 const& b, float_ beta) const {
             return Vector3(
                 lerp(X, b.X, beta),
                 lerp(Y, b.Y, beta),
@@ -112,7 +112,7 @@ namespace gquest {
         }
 
     private:
-        inline constexpr bool approx_equal(float_ a, float_ b) {
+        inline constexpr bool approx_equal(float_ a, float_ b) const {
             return (b < a + EQUALITY_TOLERANCE) && (b > a - EQUALITY_TOLERANCE) ? true : false;
         }
     };

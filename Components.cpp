@@ -48,6 +48,11 @@ namespace gquest::components {
     Position::Position(sysid currentSystem, IVector2 const & systemPosition, bool inSystem) :
         _currentSystem(currentSystem), _currentSystemPosition(systemPosition), _inSystem(inSystem) { }
 
+    Position::Position(Position const& position) :
+        _currentSystem(position._currentSystem),
+        _currentSystemPosition(position._currentSystemPosition),
+        _inSystem(position._inSystem) { }
+
     sysid Position::GetCurrentSystem() const {
         return _currentSystem;
     }

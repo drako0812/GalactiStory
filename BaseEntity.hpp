@@ -35,10 +35,10 @@ namespace gquest {
         BaseEntity(ComponentTypes ...components);
 
         template<class ...ComponentTypes>
-        AddComponents(ComponentsTypes ...components);
+        void AddComponents(ComponentTypes ...components);
 
         template<class ...IdTypes>
-        RemoveComponents(IdTypes ...components);
+        void RemoveComponents(IdTypes ...components);
 
         // Inherited via IEntity
         virtual bool HasComponentOfType(idtype component_id) const override;
@@ -48,16 +48,16 @@ namespace gquest {
 
     protected:
         template<class ComponentType, class ...ComponentTypes>
-        addComponents(ComponentType component, ComponentTypes ...components);
+        void addComponents(ComponentType component, ComponentTypes ...components);
 
         template<class ComponentType>
-        addComponents(ComponentType component);
+        void addComponents(ComponentType component);
 
         template<class IdType, class ...IdTypes>
-        removeComponents(IdType component, IdTypes ...components);
+        void removeComponents(IdType component, IdTypes ...components);
 
         template<class IdType>
-        removeComponents(IdType component);
+        void removeComponents(IdType component);
 
         // Inherited via IEntity
         virtual void RemoveAllComponents() override;
@@ -69,34 +69,34 @@ namespace gquest {
     }
 
     template<class ...ComponentTypes>
-    inline BaseEntity::AddComponents(ComponentsTypes ...components) {
+    inline void BaseEntity::AddComponents(ComponentTypes ...components) {
         addComponents(components...);
     }
 
     template<class ...IdTypes>
-    inline BaseEntity::RemoveComponents(IdTypes ...components) {
+    inline void BaseEntity::RemoveComponents(IdTypes ...components) {
         removeComponents(components...);
     }
 
     template<class ComponentType, class ...ComponentTypes>
-    inline BaseEntity::addComponents(ComponentType component, ComponentTypes ...components) {
+    inline void BaseEntity::addComponents(ComponentType component, ComponentTypes ...components) {
         AddComponent(component);
         addComponents(components...);
     }
 
     template<class ComponentType>
-    inline BaseEntity::addComponents(ComponentType component) {
+    inline void BaseEntity::addComponents(ComponentType component) {
         addComponent(component);
     }
 
     template<class IdType, class ...IdTypes>
-    inline BaseEntity::removeComponents(IdType component, IdTypes ...components) {
+    inline void BaseEntity::removeComponents(IdType component, IdTypes ...components) {
         RemoveComponent(component);
         removeComponents(components...);
     }
 
     template<class IdType>
-    inline BaseEntity::removeComponents(IdType component) {
+    inline void BaseEntity::removeComponents(IdType component) {
         RemoveComponent(component);
     }
 
