@@ -21,20 +21,23 @@
 // SOFTWARE.
 #pragma once
 
-#include "targetver.h"
+#include "World.hpp"
 
-#include <array>
-#include <chrono>
 #include <cstdint>
-#include <functional>
-#include <iostream>
-#include <iterator>
+#include <vector>
 #include <map>
 #include <memory>
-#include <sstream>
-#include <string>
-#include <thread>
-#include <vector>
 
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+namespace gquest {
+
+    class SystemMap {
+    private:
+        std::uint64_t _seed;
+        std::wstring _name;
+        
+    public:
+        SystemMap();
+        ~SystemMap();
+    };
+
+}

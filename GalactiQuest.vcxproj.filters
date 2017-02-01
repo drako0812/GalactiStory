@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\ConsoleLib">
+      <UniqueIdentifier>{2ef022b2-a60a-4274-9c92-c5064b6682bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine">
+      <UniqueIdentifier>{d9c93b2a-83f4-4e28-afd6-4b3e3f135dbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ConsoleLib">
+      <UniqueIdentifier>{073e9765-7b15-4f4c-aa3c-2d537adbccc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine">
+      <UniqueIdentifier>{0caba63b-5e4d-44cd-bb11-b05c0f40e859}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -21,26 +33,53 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Console.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="randutils.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IConsole.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ConLibBase.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\ConsoleLib</Filter>
+    </ClInclude>
+    <ClInclude Include="Console.hpp">
+      <Filter>Header Files\ConsoleLib</Filter>
+    </ClInclude>
+    <ClInclude Include="IConsole.hpp">
+      <Filter>Header Files\ConsoleLib</Filter>
     </ClInclude>
     <ClInclude Include="SubConsole.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\ConsoleLib</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseEntity.hpp">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Components.hpp">
+      <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="GalactiQuestBase.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Game.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="IComponent.hpp">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="IEntity.hpp">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.hpp">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemMap.hpp">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.hpp">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.hpp">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="World.hpp">
+      <Filter>Header Files\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -51,16 +90,28 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Console.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\ConsoleLib</Filter>
     </ClCompile>
     <ClCompile Include="IConsole.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\ConsoleLib</Filter>
     </ClCompile>
     <ClCompile Include="SubConsole.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\ConsoleLib</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseEntity.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Components.cpp">
+      <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemMap.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Source Files\Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

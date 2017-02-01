@@ -19,22 +19,11 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-#pragma once
+#include "stdafx.h"
+#include "SystemMap.hpp"
 
-#include "targetver.h"
 
-#include <array>
-#include <chrono>
-#include <cstdint>
-#include <functional>
-#include <iostream>
-#include <iterator>
-#include <map>
-#include <memory>
-#include <sstream>
-#include <string>
-#include <thread>
-#include <vector>
+SystemMap::SystemMap() { }
 
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+
+SystemMap::~SystemMap() { }

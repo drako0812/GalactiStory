@@ -21,20 +21,47 @@
 // SOFTWARE.
 #pragma once
 
-#include "targetver.h"
+#include "GalactiQuestBase.hpp"
+#include "IComponent.hpp"
+#include "Vector2.hpp"
 
-#include <array>
-#include <chrono>
-#include <cstdint>
-#include <functional>
-#include <iostream>
-#include <iterator>
-#include <map>
-#include <memory>
-#include <sstream>
-#include <string>
-#include <thread>
-#include <vector>
+namespace gquest::components {
 
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+    class Name : public IComponent {
+    private:
+        string _name;
+
+    public:
+        Name();
+        Name(string const& name);
+
+        string const& GetName();
+        void SetName(string const& name);
+
+        // Inherited via IComponent
+        virtual idtype GetId() const override;
+    };
+
+    class Position : public IComponent {
+    private:
+        sysid _currentSystem;
+        IVector2 _currentSystemPosition;
+        bool _inSystem;
+
+    public:
+        Position();
+        Position(sysid currentSystem, IVector2 const& systemPosition, bool inSystem);
+
+        sysid GetCurrentSystem() const;
+        IVector2 const& GetPosition() const;
+        bool IsInSystem() const;
+        void SetCurrentSystem(sysid system);
+        void SetPosition(IVector2 const& position);
+        void SetPosition(int_ x, int_ y);
+        void SetIsInSystem(bool inSystem);
+
+        // Inherited via IComponent
+        virtual idtype GetId() const override;
+    };
+
+}

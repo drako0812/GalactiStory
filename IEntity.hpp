@@ -21,20 +21,26 @@
 // SOFTWARE.
 #pragma once
 
-#include "targetver.h"
+#include "GalactiQuestBase.hpp"
+#include "IComponent.hpp"
 
-#include <array>
-#include <chrono>
-#include <cstdint>
-#include <functional>
-#include <iostream>
-#include <iterator>
 #include <map>
 #include <memory>
-#include <sstream>
-#include <string>
-#include <thread>
-#include <vector>
 
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+namespace gquest {
+
+    class IEntity {
+    public:
+        virtual bool HasComponentOfType(idtype component_id) const = 0;
+        virtual ComponentPtr GetComponent(idtype component_id) = 0;
+        virtual void AddComponent(ComponentPtr component) = 0;
+        virtual void RemoveComponent(idtype component_id) = 0;
+        virtual void RemoveAllComponents() = 0;
+    };
+
+    using EntityPtr = sptr<IEntity>;
+    using EntityUPtr = uptr<IEntity>;
+    using EntityList = vec<EntityPtr>;
+    using EntityMap = map<sysid, EntityList>;
+
+}

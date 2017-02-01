@@ -142,17 +142,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BaseEntity.hpp" />
+    <ClInclude Include="Components.hpp" />
     <ClInclude Include="ConLibBase.hpp" />
     <ClInclude Include="Console.hpp" />
     <ClInclude Include="GalactiQuestBase.hpp" />
     <ClInclude Include="Game.hpp" />
+    <ClInclude Include="IComponent.hpp" />
     <ClInclude Include="IConsole.hpp" />
+    <ClInclude Include="IEntity.hpp" />
     <ClInclude Include="randutils.hpp" />
+    <ClInclude Include="Rect.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="SubConsole.hpp" />
+    <ClInclude Include="SystemMap.hpp" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Vector2.hpp" />
+    <ClInclude Include="Vector3.hpp" />
+    <ClInclude Include="World.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BaseEntity.cpp" />
+    <ClCompile Include="Components.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="GalactiQuest.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -164,6 +175,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="SubConsole.cpp" />
+    <ClCompile Include="SystemMap.cpp" />
+    <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

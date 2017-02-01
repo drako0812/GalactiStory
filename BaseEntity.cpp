@@ -19,22 +19,38 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-#pragma once
+#include "stdafx.h"
+#include "BaseEntity.hpp"
 
-#include "targetver.h"
+namespace gquest {
 
-#include <array>
-#include <chrono>
-#include <cstdint>
-#include <functional>
-#include <iostream>
-#include <iterator>
-#include <map>
-#include <memory>
-#include <sstream>
-#include <string>
-#include <thread>
-#include <vector>
+    BaseEntity::BaseEntity() : _components() { }
 
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+    bool BaseEntity::HasComponentOfType(idtype component_id) const {
+        auto iter = _components.find(component_id);
+        if(iter != std::end(_components)) {
+            return true;
+        }
+        return false;
+    }
+
+    ComponentPtr BaseEntity::GetComponent(idtype component_id) {
+        return _components[component_id].get();
+    }
+
+    void BaseEntity::AddComponent(ComponentPtr component) {
+        _components[component->GetId()] = ComponentUPtr(component);
+    }
+
+    void BaseEntity::RemoveComponent(idtype component_id) {
+        auto iter = _components.find(component_id);
+        if(iter != std::end(_components)) {
+            _components.erase(iter);
+        }
+    }
+
+    void BaseEntity::RemoveAllComponents() {
+        _components.clear();
+    }
+
+}
