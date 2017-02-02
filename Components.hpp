@@ -24,6 +24,8 @@
 #include "GalactiQuestBase.hpp"
 #include "IComponent.hpp"
 #include "Vector2.hpp"
+#include "Command.hpp"
+#include "EventHandler.hpp"
 
 namespace gquest::components {
 
@@ -32,8 +34,8 @@ namespace gquest::components {
         string _name;
 
     public:
-        Name();
-        Name(string const& name);
+        Name(IEntity * parent=nullptr);
+        Name(string const& name, IEntity * parent = nullptr);
         Name(Name const& name);
 
         string const& GetName();
@@ -50,8 +52,8 @@ namespace gquest::components {
         bool _inSystem;
 
     public:
-        Position();
-        Position(sysid currentSystem, IVector2 const& systemPosition, bool inSystem);
+        Position(IEntity * parent = nullptr);
+        Position(sysid currentSystem, IVector2 const& systemPosition, bool inSystem, IEntity * parent = nullptr);
         Position(Position const& position);
 
         sysid GetCurrentSystem() const;
@@ -64,6 +66,80 @@ namespace gquest::components {
 
         // Inherited via IComponent
         virtual idtype GetId() const override;
+    };
+
+    class Cell : public IComponent {
+    private:
+        CChar _ch;
+
+    public:
+        Cell(IEntity * parent = nullptr);
+        Cell(wchar_t ch, Attr attr, IEntity * parent = nullptr);
+        Cell(CChar ch, IEntity * parent = nullptr);
+        Cell(Cell const& cell);
+
+        CChar GetCChar() const;
+        wchar_t GetChar() const;
+        Attr GetAttr() const;
+        void SetCChar(CChar ch);
+        void SetChar(wchar_t ch);
+        void SetAttr(Attr attr);
+
+        // Inherited via IComponent
+        virtual idtype GetId() const override;
+
+    };
+
+    class IController : public IComponent {
+    protected:
+        apqueue<Command> _commands;
+
+    public:
+        IController(IEntity * parent = nullptr);
+
+        virtual void PushCommand(Command const& command);
+        virtual Command const& GetTopCommand() const;
+        virtual Command PopCommand();
+        virtual bool CommandsAvailable() const;
+        virtual void ClearCommands();
+        virtual void CancelCommandsSoonerThan(uint_ when);
+        virtual void CancelCommandsLaterThan(uint_ when);
+        virtual void CancelCommandsAt(uint_ when);
+        virtual void ExecuteCommand() = 0;
+        virtual void ExecuteCommandsUntil(uint_ when);
+    };
+
+    class PlayerController : public IController {
+    private:
+        KeyEventHandlerPtr _onKeyEvent;
+        bool _canAct;
+    public:
+        PlayerController(IEntity * parent = nullptr);
+        ~PlayerController();
+
+        bool CanAct() const;
+        void Acted();
+        void ClearAct();
+
+        // Inherited via IController
+        virtual idtype GetId() const override;
+        virtual void ExecuteCommand() override;
+
+    private:
+        void onKeyEvent(KEY_EVENT_RECORD const& evt);
+
+        void trySpawnLivelySplatter();
+    };
+
+    class LivelySplatterController : public IController {
+    public:
+        LivelySplatterController(IEntity * parent = nullptr);
+        ~LivelySplatterController();
+
+        // Inherited via IController
+        virtual idtype GetId() const override;
+        virtual void ExecuteCommand() override;
+
     };
 
 }

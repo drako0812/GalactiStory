@@ -25,16 +25,22 @@
 
 #include <array>
 #include <chrono>
+#include <cmath>
 #include <cstdint>
+#include <cwchar>
 #include <functional>
 #include <iostream>
 #include <iterator>
+#include <list>
 #include <map>
 #include <memory>
+#include <queue>
 #include <sstream>
 #include <string>
 #include <thread>
+#include <tuple>
 #include <vector>
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
+#include <mmsystem.h>

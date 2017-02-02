@@ -86,7 +86,7 @@ namespace gquest {
 
     template<class ComponentType>
     inline void BaseEntity::addComponents(ComponentType component) {
-        addComponent(component);
+        AddComponent(component);
     }
 
     template<class IdType, class ...IdTypes>

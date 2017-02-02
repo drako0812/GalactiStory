@@ -49,20 +49,20 @@ namespace gquest {
 
     constexpr COLORREF Softened_Pal[16] = {
         Rgb(0, 0, 0),
-        Rgb(0, 0, 96),
-        Rgb(0, 96, 0),
-        Rgb(0, 96, 96),
-        Rgb(96, 0, 0),
-        Rgb(96, 0, 96),
-        Rgb(96, 96, 0),
-        Rgb(128, 128, 128),
-        Rgb(96, 96, 96),
-        Rgb(32, 32, 255),
-        Rgb(32, 255, 32),
-        Rgb(64, 255, 255),
-        Rgb(255, 32, 32),
-        Rgb(255, 64, 255),
-        Rgb(255, 255, 64),
+        Rgb(0, 0, 84),
+        Rgb(0, 84, 0),
+        Rgb(0, 84, 84),
+        Rgb(84, 0, 0),
+        Rgb(84, 0, 84),
+        Rgb(84, 84, 0),
+        Rgb(171, 171, 171),
+        Rgb(84, 84, 84),
+        Rgb(84, 84, 255),
+        Rgb(84, 255, 84),
+        Rgb(84, 255, 255),
+        Rgb(255, 84, 84),
+        Rgb(255, 84, 255),
+        Rgb(255, 255, 84),
         Rgb(255, 255, 255)
     };
 
@@ -146,9 +146,94 @@ namespace gquest {
     template <ui64 Size> using farray = array<float_, Size>;
     template <ui64 Size> using sarray = array<string, Size>;
 
+    // List Type
+
+    template <class Type> using list = std::list<Type>;
+
     // Mapping Type
 
     template <class KeyType, class ValueType> using map = std::map<KeyType, ValueType>;
+
+    // Queue Type
+
+    template <class Type> using queue = std::queue<Type>;
+
+    // Priority Queue Type
+
+    template <class Type> using dpqueue = std::priority_queue<Type, vec<Type>, std::less<Type>>;
+    template <class Type> using apqueue = std::priority_queue<Type, vec<Type>, std::greater<Type>>;
+
+    // Tuple Type
+
+    template <class ...Types> using tuple = std::tuple<Types...>;
+
+    // Any Type
+
+    enum class any_type { NONE, UINT, INT, FLOAT, STRING };
+
+    class any {
+    private:
+        any_type _type;
+        union {
+            uint_ _uint;
+            int_ _int;
+            float_ _float;
+            wchar_t _string[32];
+            ui8 __filler[sizeof(wchar_t) * 32];
+        };
+
+    public:
+        any() : _type(any_type::NONE) { }
+        any(uint_ value) : _type(any_type::UINT), _uint(value) { }
+        any(int_ value) : _type(any_type::INT), _int(value) { }
+        any(float_ value) : _type(any_type::FLOAT), _float(value) { }
+        any(string const& value) : _type(any_type::STRING) {
+            std::wcsncpy(_string, value.c_str(), 32);
+            _string[31] = L'\0';
+        }
+        any(any const& value) : _type(value._type) { std::memcpy(__filler, value.__filler, sizeof(__filler)); }
+        inline bool get(uint_ & value) {
+            if(_type == any_type::UINT) { value = _uint; return true; } else { return false; }
+        }
+        inline bool get(int_ & value) {
+            if(_type == any_type::INT) { value = _int; return true; } else { return false; }
+        }
+        inline bool get(float_ & value) {
+            if(_type == any_type::FLOAT) { value = _float; return true; } else { return false; }
+        }
+        inline bool get(string & value) {
+            if(_type == any_type::STRING) { value = _string; return true; } else { return false; }
+        }
+        inline void set() {
+            _type = any_type::NONE;
+            std::memset(__filler, 0x00, sizeof(__filler));
+        }
+        inline void set(uint_ value) {
+            _type = any_type::UINT;
+            std::memset(__filler, 0x00, sizeof(__filler));
+            _uint = value;
+        }
+        inline void set(int_ value) {
+            _type = any_type::INT;
+            std::memset(__filler, 0x00, sizeof(__filler));
+            _int = value;
+        }
+        inline void set(float_ value) {
+            _type = any_type::FLOAT;
+            std::memset(__filler, 0x00, sizeof(__filler));
+            _float = value;
+        }
+        inline void set(string const& value) {
+            _type = any_type::STRING;
+            std::memset(__filler, 0x00, sizeof(__filler));
+            std::wcsncpy(_string, value.c_str(), 32);
+            _string[31] = L'\0';
+        }
+    };
+
+    // Function Type
+
+    template <class Type> using function = std::function<Type>;
 
     // Pointer Types
 

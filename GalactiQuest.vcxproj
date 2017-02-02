@@ -105,7 +105,15 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>if not exist $(OutDir)data\ mkdir $(OutDir)data
+copy /Y /B $(ProjectDir)data\*.wav $(OutDir)data\*.wav</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copying data files to Output Directory</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -143,14 +151,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BaseEntity.hpp" />
+    <ClInclude Include="Command.hpp" />
     <ClInclude Include="Components.hpp" />
     <ClInclude Include="ConLibBase.hpp" />
     <ClInclude Include="Console.hpp" />
+    <ClInclude Include="EventHandler.hpp" />
     <ClInclude Include="GalactiQuestBase.hpp" />
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="IComponent.hpp" />
     <ClInclude Include="IConsole.hpp" />
     <ClInclude Include="IEntity.hpp" />
+    <ClInclude Include="LivelySplatterEntity.hpp" />
+    <ClInclude Include="PlayerEntity.hpp" />
     <ClInclude Include="randutils.hpp" />
     <ClInclude Include="Rect.hpp" />
     <ClInclude Include="stdafx.h" />
@@ -184,6 +196,11 @@
   <ItemGroup>
     <Text Include="LICENSE.txt" />
     <Text Include="randutils-LICENSE.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="data\sfx_move_001.wav">
+      <DeploymentContent>true</DeploymentContent>
+    </Media>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

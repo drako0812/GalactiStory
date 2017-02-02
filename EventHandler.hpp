@@ -19,15 +19,17 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
+#pragma once
 
-#include "stdafx.h"
-#include "Game.hpp"
+#include "GalactiQuestBase.hpp"
 
-int wmain(int argc, wchar_t * argv[]) {
-    using namespace gquest;
-    {
-        auto game = uptr<Game>(Game::Get());
-        game->Run();
-    }
-    return 0;
+namespace gquest {
+
+    using KeyEventHandler = function<void(KEY_EVENT_RECORD const&)>;
+    using MouseEventHandler = function<void(MOUSE_EVENT_RECORD const&)>;
+    using ExitGameEventHandler = function<void(void)>;
+    using KeyEventHandlerPtr = sptr<KeyEventHandler>;
+    using MouseEventHandlerPtr = sptr<MouseEventHandler>;
+    using ExitGameEventHandlerPtr = sptr<ExitGameEventHandler>;
+
 }

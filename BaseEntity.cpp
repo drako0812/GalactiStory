@@ -39,6 +39,7 @@ namespace gquest {
     }
 
     void BaseEntity::AddComponent(ComponentPtr component) {
+        component->SetParent(this);
         _components[component->GetId()] = ComponentUPtr(component);
     }
 

@@ -26,6 +26,9 @@
 #include "Console.hpp"
 #include "SubConsole.hpp"
 #include "GalactiQuestBase.hpp"
+#include "EventHandler.hpp"
+#include "PlayerEntity.hpp"
+#include "LivelySplatterEntity.hpp"
 
 namespace gquest {
 
@@ -37,12 +40,22 @@ namespace gquest {
 
     class Game {
     private:
-        std::unique_ptr<SubConsole> _subcon1;
-        int _playerX;
-        int _playerY;
+        uptr<SubConsole> _subcon1;
+        uptr<PlayerEntity> _player;
+        vec<EntityPtr> _entities;
+        //int _playerX;
+        //int _playerY;
         bool _running;
         bool _oldCursorVisible;
+        bool _actionPerformed;
+        uint_ _time;
         mt19937_rng _rng;
+
+        vec<KeyEventHandlerPtr> _keyEventHandlers;
+        vec<MouseEventHandlerPtr> _mouseEventHandlers;
+        vec<ExitGameEventHandlerPtr> _exitGameEventHandlers;
+
+        static ptr<Game> _instance;
     public:
         Game();
         ~Game();
@@ -51,6 +64,36 @@ namespace gquest {
         void Update();
         void HandleEvents();
         void HandleKeyEvent(KEY_EVENT_RECORD const& evt);
+        void HandleMouseEvent(MOUSE_EVENT_RECORD const& evt);
+        void HandleExitGameEvent();
+
+        void AddKeyEventHandler(KeyEventHandlerPtr keh);
+        void AddMouseEventHandler(MouseEventHandlerPtr meh);
+        void AddExitGameEventHandler(ExitGameEventHandlerPtr xgeh);
+
+        void RemoveKeyEventHandler(KeyEventHandlerPtr keh);
+        void RemoveMouseEventHandler(MouseEventHandlerPtr meh);
+        void RemoveExitGameEventHandler(ExitGameEventHandlerPtr xgeh);
+
+        void ClearKeyEventHandlers();
+        void ClearMouseEventHandlers();
+        void ClearExitGameEventHandlers();
+
+        void BaseKeyEventHandler(KEY_EVENT_RECORD const& evt);
+
+        ptr<SubConsole> GetSubConsole1();
+
+        uint_ Now() const;
+        bool WasActionPerformedThisFrame() const;
+        void Acted();
+
+        mt19937_rng & GetRandom();
+
+        void AddEntity(EntityPtr entity);
+        void RemoveEntity(EntityPtr entity);
+        void RemoveAllEntities();
+
+        static ptr<Game> Get();
     };
 
 }

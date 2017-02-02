@@ -25,8 +25,15 @@
 
 namespace gquest {
 
+    class IEntity;
+
     class IComponent {
+    protected:
+        IEntity * _parent;
     public:
+        IComponent(IEntity * parent=nullptr) : _parent(parent) { }
+        inline IEntity * GetParent() { return _parent; }
+        inline void SetParent(IEntity * parent) { _parent = parent; }
         virtual idtype GetId() const = 0;
     };
 
