@@ -492,6 +492,9 @@ namespace gquest::components {
                         pos->GetPosition().Y
                     )
                 );
+                //Acted();
+                Game::Get()->Acted();
+                break;
             }
             default:
                 if(evt.uChar.UnicodeChar == L'.') {

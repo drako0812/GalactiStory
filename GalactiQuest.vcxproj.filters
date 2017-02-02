@@ -132,6 +132,7 @@
   <ItemGroup>
     <Text Include="LICENSE.txt" />
     <Text Include="randutils-LICENSE.txt" />
+    <Text Include="CHANGELOG.md" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="data\sfx_move_001.wav">

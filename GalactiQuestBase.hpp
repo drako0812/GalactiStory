@@ -304,4 +304,9 @@ namespace gquest {
     constexpr float_ lerp(float_ a, float_ b, float_ beta) {
         return (1.0 - beta) * a + beta * b;
     }
+
+    constexpr uint_ VERSION_MAJOR = 0;
+    constexpr uint_ VERSION_MINOR = 1;
+    constexpr uint_ VERSION_REVISION = 0;
+    constexpr wchar_t VERSION_STRING[] = L"0.1.0";
 }

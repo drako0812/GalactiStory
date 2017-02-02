@@ -75,9 +75,10 @@ namespace gquest {
         this->_subcon1->Box(0, 0, this->_subcon1->Width(), this->_subcon1->Height(), Attr::FgLightCyan | Attr::BgBlue);
         {
             auto p_pos = (components::Position*)(this->_player->GetComponent("Position"_id));
-            this->_subcon1->PutString(1, 1, L"T: " + ToString(_time), Attr::FgWhite | Attr::FgBlue, this->_subcon1->Width() - 2);
+            this->_subcon1->PutString(1, 1, L"T: " + ToString(_time), Attr::FgWhite | Attr::BgBlue, this->_subcon1->Width() - 2);
             this->_subcon1->PutString(1, 2, L"X: " + ToString(p_pos->GetPosition().X), Attr::FgWhite | Attr::BgBlue, this->_subcon1->Width() - 2);
             this->_subcon1->PutString(1, 3, L"Y: " + ToString(p_pos->GetPosition().Y), Attr::FgWhite | Attr::BgBlue, this->_subcon1->Width() - 2);
+            this->_subcon1->PutString(1, this->_subcon1->Height() - 2, L"VERSION: " + string(VERSION_STRING), Attr::FgWhite | Attr::BgBlue, this->_subcon1->Width() - 2);
         }
         //this->_subcon1->PutString(1, 1, L"X: " + ToString(this->_playerX), Attr::FgWhite | Attr::BgBlue, this->_subcon1->Width() - 2);
         //this->_subcon1->PutString(1, 2, L"Y: " + ToString(this->_playerY), Attr::FgWhite | Attr::BgBlue, this->_subcon1->Width() - 2);
